@@ -13,6 +13,7 @@ export class TaskRepository {
   find() {
     return this.repo.find();
   }
+
   findOne(options) {
     return this.repo.findOne(options);
   }
