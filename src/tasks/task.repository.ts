@@ -1,6 +1,7 @@
 import { DataSource, Repository } from 'typeorm';
 import { Task } from './task.entity';
 import { Injectable } from '@nestjs/common';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class TaskRepository {
@@ -10,8 +11,8 @@ export class TaskRepository {
     this.repo = dataSource.getRepository(Task);
   }
 
-  find() {
-    return this.repo.find();
+  find(options) {
+    return this.repo.find(options);
   }
 
   findOne(options) {
@@ -30,8 +31,10 @@ export class TaskRepository {
     return this.repo.delete(id);
   }
 
-  filteredTasks(status?: string, search?: string) {
+  filteredTasks(user: User, status?: string, search?: string) {
     let query = this.repo.createQueryBuilder('task');
+
+    query = query.where('task.userId = :userId', { userId: user.id });
 
     if (status) {
       query = query.andWhere('task.status = :status', { status });
