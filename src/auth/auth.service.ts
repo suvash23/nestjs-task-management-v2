@@ -8,7 +8,7 @@ import { UsersRepository } from './users.repository';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './jwt-payload.iterface';
+import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -49,5 +49,10 @@ export class AuthService {
     } else {
       throw new UnauthorizedException('Invalid credentials');
     }
+  }
+
+  async validateUser(payload: JwtPayload) {
+    const { username } = payload;
+    return this.userRepository.findOne({ where: { username } });
   }
 }
